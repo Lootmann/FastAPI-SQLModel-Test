@@ -15,4 +15,5 @@ def get_session():
 
 
 if __name__ == "__main__":
+    UserModel.metadata.drop_all(engine)
     UserModel.metadata.create_all(engine)

@@ -57,6 +57,13 @@ class TestPatchUser:
         assert data["id"] == user.id
         assert data["name"] == "updated :^)"
 
+    def test_update_user_with_wrong_id(self, client: TestClient):
+        resp = client.patch("/users/123", json={"name": "updated"})
+        data = resp.json()
+
+        assert resp.status_code == status.HTTP_404_NOT_FOUND
+        assert data == {"detail": "User 123: Not Found"}
+
 
 class TestDeleteUser:
     def test_delete_user(self, client: TestClient, session: Session):

@@ -30,6 +30,8 @@ class PostCreate(PostBase):
 
 class PostRead(PostBase):
     id: int
+    # TODO: How to handle this?
+    tags: List["Tag"] = Relationship(back_populates="posts", link_model=PostTagLink)
 
 
 class PostUpdate(PostBase):

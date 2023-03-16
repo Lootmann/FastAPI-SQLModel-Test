@@ -65,3 +65,15 @@ def updated_post(
         )
 
     return post_api.update_post(db, original, post)
+
+
+@router.delete("/posts/{post_id}", response_model=None, status_code=status.HTTP_200_OK)
+def delete_post(*, db: Session = Depends(get_session), post_id: int):
+    # TODO: get user id with authentications
+    original = post_api.find_by_id(db, post_id)
+    if not original:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Post {post_id}: Not Found",
+        )
+    return post_api.delete_post(db, original)

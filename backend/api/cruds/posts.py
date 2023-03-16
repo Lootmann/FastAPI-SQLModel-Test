@@ -30,3 +30,9 @@ def update_post(
     db.commit()
     db.refresh(original)
     return original
+
+
+def delete_post(db: Session, post: post_model.Post) -> None:
+    db.delete(post)
+    db.commit()
+    return

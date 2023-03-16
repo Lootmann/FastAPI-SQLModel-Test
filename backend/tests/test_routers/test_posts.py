@@ -113,3 +113,19 @@ class TestPatchPost:
             json={"user_id": user.id + 100, "content": "updated :^)"},
         )
         assert resp.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+class TestDeletePost:
+    def test_delete_post(self, client: TestClient, session: Session):
+        user = UserFactory.create_user(session, user_model.UserCreate(name="hoge"))
+        post = PostFactory.create_post(
+            session, post_model.PostCreate(content="first post", user_id=user.id)
+        )
+
+        resp = client.delete(f"/posts/{post.id}")
+        data = resp.json()
+        assert data == None
+
+    def test_delete_post_with_wrong_id(self, client: TestClient, session: Session):
+        resp = client.delete("/posts/123")
+        assert resp.status_code == status.HTTP_404_NOT_FOUND

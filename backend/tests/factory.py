@@ -1,5 +1,6 @@
 from sqlmodel import Session
 
+from api.models import posts as post_model
 from api.models import users as user_model
 
 
@@ -14,3 +15,13 @@ class UserFactory:
         db.commit()
         db.refresh(db_user)
         return db_user
+
+
+class PostFactory:
+    @staticmethod
+    def create_post(db: Session, post: post_model.PostCreate) -> post_model.PostRead:
+        db_post = post_model.Post.from_orm(post)
+        db.add(db_post)
+        db.commit()
+        db.refresh(db_post)
+        return db_post

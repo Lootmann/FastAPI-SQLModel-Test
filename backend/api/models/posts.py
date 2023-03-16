@@ -8,6 +8,8 @@ if TYPE_CHECKING:
 
 class PostBase(SQLModel):
     content: str = Field(index=True)
+    # NOTE: All PostBase has user_id: int
+    user_id: Optional[int] = Field(foreign_key="user.id")
 
 
 class Post(PostBase, table=True):
@@ -16,8 +18,7 @@ class Post(PostBase, table=True):
     """
 
     id: Optional[int] = Field(default=None, primary_key=True)
-
-    user_id: Optional[int] = Field(default=None, foreign_key="user.id")
+    # NOTE: Only Table should have the relation !
     user: Optional["User"] = Relationship(back_populates="posts")
 
 
@@ -27,7 +28,6 @@ class PostCreate(PostBase):
 
 class PostRead(PostBase):
     id: int
-    user: Optional["User"]
 
 
 class PostUpdate(PostBase):

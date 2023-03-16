@@ -16,7 +16,6 @@ class User(UserBase, table=True):
     """
 
     id: Optional[int] = Field(default=None, primary_key=True)
-
     posts: List["Post"] = Relationship(back_populates="user")
 
 
@@ -26,6 +25,7 @@ class UserCreate(UserBase):
 
 class UserRead(UserBase):
     id: int
+    # TODO: how to avoid this duplicate definition?
     posts: List["Post"] = Relationship(back_populates="User")
 
 

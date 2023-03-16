@@ -6,16 +6,16 @@ from api.models import users as user_model
 
 
 def get_all_users(db: Session) -> List[user_model.UserRead]:
-    return db.exec(select(user_model.UserTable)).all()
+    return db.exec(select(user_model.User)).all()
 
 
 def find_by_id(db: Session, user_id: int) -> user_model.UserRead | None:
-    stmt = select(user_model.UserTable).where(user_model.UserTable.id == user_id)
+    stmt = select(user_model.User).where(user_model.User.id == user_id)
     return db.exec(stmt).first()
 
 
 def find_by_name(db: Session, user_name: str) -> user_model.UserRead | None:
-    stmt = select(user_model.UserTable).where(user_model.UserTable.name == user_name)
+    stmt = select(user_model.User).where(user_model.User.name == user_name)
     return db.exec(stmt).first()
 
 
@@ -27,7 +27,7 @@ def create_user(db: Session, user: user_model.UserCreate) -> user_model.UserRead
     The method .from_orm() reads data from another object with attributes
     and creates a new instance of this class, in this case Hero.
     """
-    db_user = user_model.UserTable.from_orm(user)
+    db_user = user_model.User.from_orm(user)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -35,7 +35,7 @@ def create_user(db: Session, user: user_model.UserCreate) -> user_model.UserRead
 
 
 def update_user(
-    db: Session, origin: user_model.UserTable, user: user_model.UserUpdate
+    db: Session, origin: user_model.User, user: user_model.UserUpdate
 ) -> user_model.UserRead:
     if user.name != "":
         origin.name = user.name
@@ -46,7 +46,7 @@ def update_user(
     return origin
 
 
-def delete_user(db: Session, origin: user_model.UserTable) -> None:
+def delete_user(db: Session, origin: user_model.User) -> None:
     db.delete(origin)
     db.commit()
     return

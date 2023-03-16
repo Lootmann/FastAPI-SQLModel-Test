@@ -9,7 +9,7 @@ class UserFactory:
         """
         NOTE: Consider whether the arguments of this function should be UserCreate or name="hoge"
         """
-        db_user = user_model.UserTable.from_orm(user)
+        db_user = user_model.User.from_orm(user)
         db.add(db_user)
         db.commit()
         db.refresh(db_user)

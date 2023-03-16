@@ -15,6 +15,14 @@ class TestPostUser:
         assert data["name"] == "hoge"
         assert data["id"] is not None
 
+    def test_create_user_with_duplicate_name(
+        self, client: TestClient, session: Session
+    ):
+        UserFactory.create_user(session, user_model.UserCreate(name="hoge"))
+
+        resp = client.post("/users", json={"name": "hoge"})
+        assert resp.status_code == status.HTTP_409_CONFLICT
+
 
 class TestGetUser:
     def test_get_all_user(self, client: TestClient, session: Session):

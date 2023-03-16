@@ -40,6 +40,12 @@ def get_user(*, db: Session = Depends(get_session), user_id: int):
     status_code=status.HTTP_201_CREATED,
 )
 def create_user(*, db: Session = Depends(get_session), user: user_model.UserCreate):
+    found = user_api.find_by_name(db, user.name)
+    if found:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"User {user.name}: Duplicate name",
+        )
     return user_api.create_user(db, user)
 
 

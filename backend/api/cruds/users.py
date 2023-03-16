@@ -14,6 +14,11 @@ def find_by_id(db: Session, user_id: int) -> user_model.UserRead | None:
     return db.exec(stmt).first()
 
 
+def find_by_name(db: Session, user_name: str) -> user_model.UserRead | None:
+    stmt = select(user_model.UserTable).where(user_model.UserTable.name == user_name)
+    return db.exec(stmt).first()
+
+
 def create_user(db: Session, user: user_model.UserCreate) -> user_model.UserRead:
     """
     Then we create a new Hero (this is the actual table model

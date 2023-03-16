@@ -25,7 +25,6 @@ class UserCreate(UserBase):
 
 class UserRead(UserBase):
     id: int
-    # TODO: how to avoid this duplicate definition?
     posts: List["Post"] = Relationship(back_populates="User")
 
 

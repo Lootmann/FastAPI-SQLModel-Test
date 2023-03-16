@@ -28,6 +28,23 @@ class TestGetUser:
         data = resp.json()
         assert len(data) == 3
 
+    def test_get_one_user(self, client: TestClient, session: Session):
+        user = UserFactory.create_user(session, user_model.UserCreate(name="hoge"))
+
+        resp = client.get(f"/users/{user.id}")
+        data = resp.json()
+
+        assert resp.status_code == status.HTTP_200_OK
+        assert data["id"] == user.id
+        assert data["name"] == user.name
+
+    def test_get_one_user_with_wrong_id(self, client: TestClient):
+        resp = client.get("/users/123")
+        data = resp.json()
+
+        assert resp.status_code == status.HTTP_404_NOT_FOUND
+        assert data == {"detail": "User 123: Not Found"}
+
 
 class TestPatchUser:
     def test_update_user(self, client: TestClient, session: Session):

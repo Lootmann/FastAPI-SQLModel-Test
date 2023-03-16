@@ -25,12 +25,4 @@ def read_all_tags(*, db: Session = Depends(get_session)):
     status_code=status.HTTP_201_CREATED,
 )
 def create_tag(*, db: Session = Depends(get_session), tag: tag_model.TagCreate):
-    """
-    class TagCreate(TagBase):
-        name: str = Field(index=True)
-    """
-    db_tag = tag_model.Tag.from_orm(tag)
-    db.add(db_tag)
-    db.commit()
-    db.refresh(db_tag)
-    return db_tag
+    return tag_api.create_tag(db, tag)

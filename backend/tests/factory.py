@@ -1,6 +1,7 @@
 from sqlmodel import Session
 
 from api.models import posts as post_model
+from api.models import tags as tag_model
 from api.models import users as user_model
 
 
@@ -25,3 +26,13 @@ class PostFactory:
         db.commit()
         db.refresh(db_post)
         return db_post
+
+
+class TagFactory:
+    @staticmethod
+    def create_tag(db: Session, tag: tag_model.TagCreate) -> tag_model.TagRead:
+        db_tag = tag_model.Tag.from_orm(tag)
+        db.add(db_tag)
+        db.commit()
+        db.refresh(db_tag)
+        return db_tag

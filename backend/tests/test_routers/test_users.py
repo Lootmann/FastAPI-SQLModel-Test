@@ -82,3 +82,9 @@ class TestDeleteUser:
         resp = client.get("/users")
         data = resp.json()
         assert len(data) == 0
+
+    def test_delete_user_with_wrong_id(self, client: TestClient):
+        resp = client.delete(f"/users/123")
+        data = resp.json()
+        assert resp.status_code == status.HTTP_404_NOT_FOUND
+        assert data == {"detail": "User 123: Not Found"}

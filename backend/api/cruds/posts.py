@@ -20,3 +20,13 @@ def create_post(db: Session, post: post_model.PostCreate) -> post_model.PostRead
     db.commit()
     db.refresh(db_post)
     return db_post
+
+
+def update_post(
+    db: Session, original: post_model.Post, post: post_model.PostUpdate
+) -> post_model.PostRead:
+    original.content = post.content
+    db.add(original)
+    db.commit()
+    db.refresh(original)
+    return original

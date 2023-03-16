@@ -75,3 +75,41 @@ class TestPostFactory:
 
         assert post.content == "first post"
         assert post.user_id == user.id
+
+
+class TestPatchPost:
+    def test_update_post(self, client: TestClient, session: Session):
+        user = UserFactory.create_user(session, user_model.UserCreate(name="hoge"))
+        post = PostFactory.create_post(
+            session, post_model.PostCreate(content="first post", user_id=user.id)
+        )
+
+        resp = client.patch(
+            f"/posts/{post.id}", json={"user_id": user.id, "content": "updated :^)"}
+        )
+        data = resp.json()
+
+        assert resp.status_code == status.HTTP_200_OK
+        assert data["content"] == post.content
+        assert data["content"] == "updated :^)"
+
+    def test_update_post_with_wrong_post_id(self, client: TestClient, session: Session):
+        user = UserFactory.create_user(session, user_model.UserCreate(name="hoge"))
+
+        resp = client.patch(
+            f"/posts/123",
+            json={"user_id": user.id, "content": "updated :^)"},
+        )
+        assert resp.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_update_post_with_wrong_user_id(self, client: TestClient, session: Session):
+        user = UserFactory.create_user(session, user_model.UserCreate(name="hoge"))
+        post = PostFactory.create_post(
+            session, post_model.PostCreate(content="first post", user_id=user.id)
+        )
+
+        resp = client.patch(
+            f"/posts/{post.id}",
+            json={"user_id": user.id + 100, "content": "updated :^)"},
+        )
+        assert resp.status_code == status.HTTP_401_UNAUTHORIZED

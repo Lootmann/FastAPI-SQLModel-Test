@@ -101,6 +101,7 @@ class TestPostTag:
         assert data["id"] == post.id
         assert data["user_id"] == user.id
         assert data["content"] == post.content
+        assert len(data["tags"]) == 5
 
     def test_add_tag_post_with_wrong_post_id(self, client: TestClient):
         resp = client.post("/posts/1000/tags/1")

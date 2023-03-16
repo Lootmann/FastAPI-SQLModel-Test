@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, List, Optional
 from sqlmodel import Field, Relationship, SQLModel
 
 from api.models.posts_tags import PostTagLink
+from api.models.tags import Tag
 
 if TYPE_CHECKING:
     from api.models.tags import Tag
@@ -30,8 +31,7 @@ class PostCreate(PostBase):
 
 class PostRead(PostBase):
     id: int
-    # TODO: How to handle this?
-    tags: List["Tag"] = Relationship(back_populates="posts", link_model=PostTagLink)
+    tags: List["Tag"] = Field(default=None)
 
 
 class PostUpdate(PostBase):

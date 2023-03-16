@@ -38,6 +38,37 @@ class TestPostTag:
         assert len(data) == 1
 
 
+class TestUpdateTag:
+    def test_update_tag(self, client: TestClient, session: Session):
+        tag = TagFactory.create_tag(session, tag_model.TagCreate(name="new tag"))
+
+        resp = client.patch(f"/tags/{tag.id}", json={"name": "updated"})
+        data = resp.json()
+
+        assert resp.status_code == status.HTTP_200_OK
+        assert data["id"] == tag.id
+        assert data["name"] != "new tag"
+        assert data["name"] == "updated"
+
+    def test_update_tag_with_wrong_id(self, client: TestClient, session: Session):
+        TagFactory.create_tag(session, tag_model.TagCreate(name="new tag"))
+
+        resp = client.patch("/tags/123", json={"name": "updated"})
+        data = resp.json()
+
+        assert resp.status_code == status.HTTP_404_NOT_FOUND
+        assert data == {"detail": "Tag 123: Not Found"}
+
+    def test_update_tag_with_empty_name(self, client: TestClient, session: Session):
+        tag = TagFactory.create_tag(session, tag_model.TagCreate(name="new tag"))
+
+        resp = client.patch(f"/tags/{tag.id}", json={"name": ""})
+        data = resp.json()
+
+        assert resp.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert data == {"detail": "Tag: Should Not Empty"}
+
+
 class TestDeleteTag:
     def test_delete_tag(self, client: TestClient, session: Session):
         tag = TagFactory.create_tag(session, tag_model.TagCreate(name="new tag"))

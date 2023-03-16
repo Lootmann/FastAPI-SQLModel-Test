@@ -36,3 +36,17 @@ class TestPostTag:
         data = resp.json()
         assert resp.status_code == status.HTTP_200_OK
         assert len(data) == 1
+
+
+class TestDeleteTag:
+    def test_delete_tag(self, client: TestClient, session: Session):
+        tag = TagFactory.create_tag(session, tag_model.TagCreate(name="new tag"))
+
+        resp = client.delete(f"/tags/{tag.id}")
+        data = resp.json()
+        assert resp.status_code == status.HTTP_200_OK
+        assert data == None
+
+    def test_delete_tag_with_wrong_id(self, client: TestClient, session: Session):
+        resp = client.delete(f"/tags/123")
+        assert resp.status_code == status.HTTP_404_NOT_FOUND

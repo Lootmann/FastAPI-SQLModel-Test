@@ -20,3 +20,9 @@ def create_tag(db: Session, tag: tag_model.TagCreate) -> tag_model.TagRead:
     db.commit()
     db.refresh(db_tag)
     return db_tag
+
+
+def delete_tag(db: Session, tag: tag_model.TagRead) -> None:
+    db.delete(tag)
+    db.commit()
+    return

@@ -41,3 +41,14 @@ def find_by_id(*, db: Session = Depends(get_session), tag_id: int):
 )
 def create_tag(*, db: Session = Depends(get_session), tag: tag_model.TagCreate):
     return tag_api.create_tag(db, tag)
+
+
+@router.delete("/tags/{tag_id}", response_model=None, status_code=status.HTTP_200_OK)
+def delete_tag(*, db: Session = Depends(get_session), tag_id: int):
+    found = tag_api.find_by_id(db, tag_id)
+    if not found:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Tag {tag_id}: Not Found",
+        )
+    return tag_api.delete_tag(db, found)

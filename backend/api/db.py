@@ -1,4 +1,7 @@
-from sqlmodel import Session, SQLModel, create_engine
+from sqlmodel import Session, create_engine
+
+from api.models.posts import Post
+from api.models.users import User
 
 sqlite_file_name = "dev.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
@@ -13,5 +16,9 @@ def get_session():
 
 
 if __name__ == "__main__":
-    SQLModel.metadata.drop_all(engine)
-    SQLModel.metadata.create_all(engine)
+    # TODO: SQLModel.metadata doesn't work D:
+    User.metadata.drop_all(engine)
+    User.metadata.create_all(engine)
+
+    Post.metadata.drop_all(engine)
+    Post.metadata.create_all(engine)

@@ -29,7 +29,7 @@ def get_user(*, db: Session = Depends(get_session), user_id: int):
     if not found:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"User: {user_id} Not Found",
+            detail=f"User {user_id}: Not Found",
         )
     return found
 
@@ -58,6 +58,17 @@ def update_user(
     if not origin:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"User: {user_id} Not Found",
+            detail=f"User {user_id}: Not Found",
         )
     return user_api.update_user(db, origin, user)
+
+
+@router.delete("/users/{user_id}", response_model=None, status_code=status.HTTP_200_OK)
+def delete_user(*, db: Session = Depends(get_session), user_id: int):
+    origin = user_api.find_by_id(db, user_id)
+    if not origin:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User {user_id}: Not Found",
+        )
+    return user_api.delete_user(db, origin)

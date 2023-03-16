@@ -39,3 +39,22 @@ class TestPatchUser:
         data = resp.json()
         assert data["id"] == user.id
         assert data["name"] == "updated :^)"
+
+
+class TestDeleteUser:
+    def test_delete_user(self, client: TestClient, session: Session):
+        user = UserFactory.create_user(session, user_model.UserCreate(name="hoge"))
+
+        resp = client.get("/users")
+        data = resp.json()
+        assert len(data) == 1
+
+        resp = client.delete(f"/users/{user.id}")
+        assert resp.status_code == status.HTTP_200_OK
+
+        data = resp.json()
+        assert data == None
+
+        resp = client.get("/users")
+        data = resp.json()
+        assert len(data) == 0

@@ -7,7 +7,7 @@ from api.cruds import posts as post_api
 from api.db import get_session
 from api.models import posts as post_model
 
-router = APIRouter()
+router = APIRouter(tags=["posts"])
 
 
 @router.get(

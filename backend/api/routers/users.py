@@ -7,7 +7,7 @@ from api.cruds import users as user_api
 from api.db import get_session
 from api.models import users as user_model
 
-router = APIRouter()
+router = APIRouter(tags=["users"])
 
 
 @router.get(
